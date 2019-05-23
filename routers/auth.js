@@ -8,6 +8,9 @@ const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const auth = require('../middelware/auth');
+
+
+
 router.post('/',async (req,res)=>{
     
     const {error} = validate(req.body);
@@ -25,6 +28,13 @@ router.post('/',async (req,res)=>{
     res.header('x-auth-token',token).send(_.pick(user,['_id','name','email']))
 
 });
+
+
+router.get('/token',(req,res)=>{
+    var v = jwt.verify(req.header('x-auth-token'),'jwtPrivate');
+    res.send({statue:v});
+});
+
 
 function validate(user){
     const schema={
